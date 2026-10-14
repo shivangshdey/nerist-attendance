@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   stats, summarise, buckets, buildCourses, classroomIndex, normaliseSessions, groupBlocks, planDay,
-  dayBuckets, recentSessions, reminderId, reminderAt, istParts, applyMoves, pruneMoves,
+  reminderId, reminderAt, istParts, applyMoves, pruneMoves,
 } from '../scripts/attendance.mjs';
 import { syncReminders, reminderText } from '../scripts/reminders.mjs';
 
@@ -90,12 +90,6 @@ test('sessions: types, statuses, cancelled ones dropped, labs grouped into one c
   const blocks = groupBlocks(s.filter((x) => Date.parse(x.start) > Date.parse('2026-10-13T00:00:00Z')));
   assert.deepEqual(blocks.map((b) => [b.code, b.type, b.periods]), [['EC24102', 'practical', 3], ['EC24004', 'theory', 1], ['EC24102', 'theory', 1]]);
   assert.equal(blocks[1].rescheduled, true);
-  const days = dayBuckets(s);
-  assert.deepEqual(days, [{ date: '2026-10-12', present: 1, absent: 1, classes: [
-    { time: '10:00', code: 'EC24102', name: 'VLSI Design', type: 'theory', status: 'present' },
-    { time: '11:00', code: 'EC24004', name: 'Wireless Communication', type: 'theory', status: 'absent' },
-  ] }]);
-  assert.equal(recentSessions(s)[0].status, 'absent');
 });
 
 test('per-subject buckets match Cinderac (need / buffer)', () => {

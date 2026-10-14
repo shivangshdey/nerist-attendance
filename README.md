@@ -91,4 +91,4 @@ minutes. Cloudflare redeploys only when your numbers change.
 | `scripts/reminders.mjs` | queues, replaces and cancels class reminders on ntfy |
 | `state/state.json` | which reminders are queued (written by the workflow) |
 
-`npm test` runs the tests. `npm run dev` serves the dashboard locally.
+`npm test` runs the tests. `npm run dev` runs the Worker locally (put test secrets in `.dev.vars`).

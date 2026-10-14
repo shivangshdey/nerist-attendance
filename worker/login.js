@@ -110,8 +110,6 @@ export const loginPage = (error = '') => `<!doctype html>
     .logo { width: 34px; height: 34px; border-radius: 50%; background: var(--plum); display: grid; place-items: center; }
     .logo svg { width: 18px; height: 18px; fill: none; stroke: var(--lime); stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; }
     .brand small { padding-top: 10px; border-top: 1px solid var(--ink-3); font-size: 0.8125rem; color: var(--ink-2); font-weight: 600; }
-    .pill { height: 42px; padding: 0 18px; border-radius: 12px; background: var(--lime); display: inline-flex; align-items: center; font-weight: 700; font-size: 0.875rem; }
-    @media (max-width: 520px) { .pill { display: none; } }
 
     main { position: relative; display: grid; place-items: center; padding: 28px 16px; }
     .doodle { position: fixed; bottom: 0; pointer-events: none; z-index: 0; height: min(78vh, 600px); width: auto; }
@@ -179,7 +177,6 @@ export const loginPage = (error = '') => `<!doctype html>
       <b><span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6.5 12.5l3.6 3.6L17.5 8.7" /></svg></span>nerist attendance</b>
       <small>75% in every subject, theory and lab</small>
     </div>
-    <span class="pill">Private dashboard</span>
   </header>
 
   <main>

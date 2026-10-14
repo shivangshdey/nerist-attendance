@@ -267,26 +267,3 @@ export function reminderId(o) {
 export function reminderAt(o, before = REMIND_BEFORE_MIN) {
   return new Date(Date.parse(o.start) - before * 60000);
 }
-
-/* ------------------------------------------------------------------ */
-/* Activity heatmap + recent sessions                                  */
-/* ------------------------------------------------------------------ */
-
-/** One entry per IST day that had marked classes. */
-export function dayBuckets(sessions) {
-  const days = new Map();
-  for (const s of sessions) {
-    if (!s.status) continue;
-    const { date } = istParts(s.start);
-    const d = days.get(date) || { date, present: 0, absent: 0, classes: [] };
-    d[s.status] += 1;
-    d.classes.push({ time: istParts(s.start).time, code: s.code, name: s.name, type: s.type, status: s.status });
-    days.set(date, d);
-  }
-  return [...days.values()].sort((a, b) => a.date.localeCompare(b.date));
-}
-
-export function recentSessions(sessions, n = 12) {
-  return groupBlocks(sessions.filter((s) => s.status)).slice(-n).reverse()
-    .map(({ start, code, name, type, status, room, periods }) => ({ start, code, name, type, status, room, periods }));
-}

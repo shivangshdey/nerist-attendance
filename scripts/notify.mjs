@@ -14,7 +14,7 @@ export function buildAlert(data, prev = {}) {
   const summary = low.length
     ? low.map((b) => `${label(b)}: ${pctStr(b.pct)}, need ${b.mustAttend}`).join('\n')
     : 'everything is above 75%.';
-  if (!prev.courses || prev.demo || prev.preview) {
+  if (!prev.courses) {
     return { title: low.length ? `Connected. ${low.length} under 75%` : 'Connected. All good', body: `${summary}\npings 10 min before every class.`, priority: 3, tags: ['white_check_mark'] };
   }
   const was = new Map(buckets(prev.courses, prev.threshold).map((b) => [`${b.code}|${b.type}`, b.safe]));

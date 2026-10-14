@@ -22,7 +22,7 @@ let view = null;       // 'day' | 'week'
 let weekOf = null;     // Monday (IST date) shown in the calendar
 let dayOf = null;      // date shown in day view
 let moves = {};        // classes you moved: { [id]: { from, start, end } }
-let canSave = false;   // the Worker answered /api/moves (not on a local preview)
+let canSave = false;   // the Worker answered /api/moves, so moves can be saved
 
 /* ------------------------------------------------------------------ plan */
 
@@ -63,7 +63,6 @@ function renderHead(d) {
   const n = (d.student?.name || '').split(/\s+/).filter(Boolean);
   $('#avatar').textContent = n.slice(0, 2).map((w) => w[0]).join('').toUpperCase() || '·';
   $('#avatar').title = d.student?.name || '';
-  $('#previewNote').hidden = !d.preview;
   renderSync(d.updatedAt);
 }
 
@@ -84,7 +83,7 @@ function ring(pct, size = 64) {
   return `<svg class="mini-ring" viewBox="0 0 64 64" width="${size}" height="${size}" aria-hidden="true">
     <circle cx="32" cy="32" r="${r}" class="mr-track"/>
     <circle cx="32" cy="32" r="${r}" class="mr-bar${p < 0.75 ? ' low' : ''}" stroke-dasharray="${c}" stroke-dashoffset="${c * (1 - p)}" transform="rotate(-90 32 32)"/>
-    <polyline points="${tick(19)} ${tick(33)}" class="mr-tick"/>
+    <polyline points="${tick(21)} ${tick(31)}" class="mr-tick"/>
   </svg>`;
 }
 
@@ -178,11 +177,11 @@ function renderCal() {
   const days = Array.from({ length: 6 }, (_, k) => addDays(weekOf, k));
   const inWeek = list.filter((c) => days.includes(istParts(c.start).date));
   const today = istParts().date;
-  $('#calToday').hidden = weekOf === weekStart(today) && (view === 'week' || dayOf === today);
   const thisWeek = weekOf === weekStart(today);
   $('#calTitle').innerHTML = `${thisWeek ? 'This week' : weekOf > weekStart(today) ? 'Next week' : 'Earlier'} <span>${dateLabel(days[0], { day: 'numeric', month: 'short' })} – ${dateLabel(days[5], { day: 'numeric', month: 'short' })}</span>`;
   if (view === 'week') renderWeek(days, inWeek, today);
   else renderDay(days, inWeek, today);
+  $('#calToday').hidden = weekOf === weekStart(today) && (view === 'week' || dayOf === today);
 }
 
 /** Upcoming classes can be moved; past ones are what the portal says they were. */
@@ -225,11 +224,31 @@ function renderWeek(days, items, today) {
   const nowM = istParts().minutes;
   const showNow = cols.includes(today) && nowM > h0 * 60 && nowM < h1 * 60;
 
+  const box = $('#calBody .week');
+  const keep = box && shown === `${view}|${weekOf}` ? box.scrollLeft : null;
   $('#calBody').innerHTML = `<div class="week"><div class="wk" style="--cols:${cols.length}">
     <div class="wk-head"><span class="wk-tz">IST</span>${head}</div>
     <div class="wk-grid" style="height:${(h1 - h0) * H}px"><div class="wk-times">${times}</div>${rules}${colsHtml}
       ${showNow ? `<i class="now" style="top:${y(nowM)}px"><span>${istParts().time}</span></i>` : ''}</div>
   </div></div>`;
+  scrollWeek(keep);
+}
+
+/**
+ * Narrow screens can't fit the whole week, so open it on today (or on the first
+ * day still to come) instead of Monday. A refresh of the same week keeps your scroll.
+ */
+let shown = null;
+function scrollWeek(keep) {
+  const box = $('#calBody .week');
+  shown = `${view}|${weekOf}`;
+  if (keep != null) { box.scrollLeft = keep; return; }
+  if (box.scrollWidth <= box.clientWidth) return;
+  const today = istParts().date;
+  const cols = [...box.querySelectorAll('.wk-col')];
+  const col = cols.find((c) => c.dataset.date >= today) || cols[0];
+  const timeCol = $('.wk-times', box).offsetWidth;
+  box.scrollLeft = col === cols[0] ? 0 : col.offsetLeft - timeCol;
 }
 
 function renderDay(days, items, today) {
@@ -583,15 +602,16 @@ async function loadMoves() {
     canSave = true;
     return changed;
   } catch {
-    return false; // local preview: no Worker, so classes can't be moved
+    return false; // couldn't reach the Worker: show classes, but don't offer moving
   }
 }
 
 async function load() {
   try {
-    const embedded = document.getElementById('embedded-data');
-    const movesChanged = embedded || drag?.on ? false : await loadMoves();
-    const next = embedded ? JSON.parse(embedded.textContent) : await (await fetch(`${DATA_URL}?t=${Date.now()}`, { cache: 'no-store' })).json();
+    const movesChanged = drag?.on ? false : await loadMoves();
+    const res = await fetch(`${DATA_URL}?t=${Date.now()}`, { cache: 'no-store' });
+    if (res.status === 401) { location.reload(); return; } // signed out elsewhere: show the sign-in page
+    const next = await res.json();
     if (!next?.courses) throw new Error('no data');
     if (data && next.updatedAt === data.updatedAt) {
       renderSync(data.updatedAt);

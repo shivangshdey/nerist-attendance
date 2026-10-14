@@ -121,7 +121,7 @@ async function main() {
     await fs.mkdir(path.dirname(OUT), { recursive: true });
     await fs.writeFile(OUT, JSON.stringify(data, null, 2) + '\n');
     console.log(`${courses.length} courses · Theory ${(groups.theory.pct * 100).toFixed(1)}% (${groups.theory.attended}/${groups.theory.total}) · Practical ${(groups.practical.pct * 100).toFixed(1)}% (${groups.practical.attended}/${groups.practical.total})`);
-  } else if (prev.courses && !prev.demo && !prev.preview) {
+  } else if (prev.courses) {
     data = prev; // portal down: keep reminders going from the last good numbers
   } else {
     throw error;

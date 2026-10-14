@@ -7,7 +7,6 @@
     "sync": "node scripts/sync.mjs",
     "sync:local": "node --env-file=.env scripts/sync.mjs",
     "test": "node --test test/*.test.mjs",
-    "preview-data": "node scripts/demo-data.mjs",
-    "dev": "npx --yes serve public -l 4321"
+    "dev": "npx wrangler dev"
   }
 }
