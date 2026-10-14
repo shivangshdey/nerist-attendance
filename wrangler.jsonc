@@ -1,5 +1,10 @@
 {
   "name": "nerist-attendance",
+  "main": "worker/index.js",
   "compatibility_date": "2026-10-01",
-  "assets": { "directory": "./public" }
+  // Every request goes through the Worker first, so nothing is served without the password.
+  "assets": { "directory": "./public", "binding": "ASSETS", "run_worker_first": true },
+  // Classes you moved on the dashboard, and failed-login counters.
+  "kv_namespaces": [{ "binding": "KV", "id": "460fa65087fc4622a695846085378cc8" }]
+  // Secrets (wrangler secret put): DASH_PASSWORD, SESSION_SECRET, SYNC_TOKEN, NTFY_TOPIC
 }

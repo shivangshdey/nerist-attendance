@@ -1,6 +1,7 @@
 // Class reminders, 10 minutes before each class, via ntfy's scheduled delivery.
 // The schedule is the portal's own lecture plan, so rescheduled and extra classes
-// are picked up automatically. Every sync keeps ntfy in step:
+// are picked up automatically, plus any class you moved on the dashboard.
+// Every sync keeps ntfy in step:
 //  - a new or changed verdict replaces the pending reminder (same sequence_id)
 //  - a class the portal moved or cancelled has its pending reminder deleted
 // So the reminder you get always reflects the latest numbers and timetable.
@@ -14,7 +15,7 @@ const istTime = (iso) => new Date(Date.parse(iso) + 330 * 60000).toISOString().s
 export function reminderText(o) {
   const what = o.type === 'practical' ? `${o.name} lab` : o.name;
   const at = `${what} · ${istTime(o.start)}${o.room ? ` · ${o.room}` : ''}`;
-  const moved = o.rescheduled ? ' (moved)' : o.extra ? ' (extra)' : '';
+  const moved = o.rescheduled || o.moved ? ' (moved)' : o.extra ? ' (extra)' : '';
   const counts = o.periods > 1 ? ` · counts as ${o.periods}` : '';
   if (o.verdict === 'skip') {
     return {
@@ -38,6 +39,13 @@ export function reminderText(o) {
     priority: 4,
     tags: ['warning'],
   };
+}
+
+/** The ntfy publish body for one class; the same sequence_id replaces a pending reminder. */
+export function reminderBody(o, { topic, before = REMIND_BEFORE_MIN, click } = {}) {
+  const body = { topic, sequence_id: reminderId(o), delay: String(Math.floor(reminderAt(o, before).getTime() / 1000)), ...reminderText(o) };
+  if (click) body.click = click;
+  return body;
 }
 
 const hash = (obj) => {
@@ -74,9 +82,7 @@ export async function syncReminders(plan, previous = [], {
     next.push(entry);
     const old = prev.get(id);
     if (old && old.hash === entry.hash && old.at === entry.at) { stats.kept++; continue; }
-    const body = { topic, sequence_id: id, delay: String(Math.floor(at.getTime() / 1000)), ...text };
-    if (click) body.click = click;
-    const res = await fetchImpl(server, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const res = await fetchImpl(server, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(reminderBody(o, { topic, before, click })) });
     if (!res.ok) throw new Error(`ntfy rejected reminder ${id}: ${res.status}`);
     stats.scheduled++;
   }

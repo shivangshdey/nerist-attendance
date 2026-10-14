@@ -6,12 +6,13 @@
 //   SX_USER, SX_PASS   portal login: registration number (e.g. 121/010) and password. GitHub Secrets only.
 //   NTFY_TOPIC         ntfy.sh topic for phone notifications
 //   DASHBOARD_URL      optional: opened when you tap a notification
+//   SYNC_TOKEN         optional: reads the classes you moved from the dashboard's Worker
 //   DEBUG_DUMP=1       save the shape of every API response to debug/ (field names only, no values)
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {
-  buildCourses, summarise, normaliseSessions, groupBlocks, planDay, istParts, istInstant, weekStart, THRESHOLD,
+  buildCourses, summarise, normaliseSessions, groupBlocks, planDay, applyMoves, istParts, istInstant, weekStart, THRESHOLD,
 } from './attendance.mjs';
 import { createClient } from './symphonyx.mjs';
 import { notify, buildAlert } from './notify.mjs';
@@ -77,6 +78,23 @@ export async function fetchAll(now, { client } = {}) {
   }
 }
 
+/** Classes you moved on the dashboard, kept by the Worker. Empty if it can't be reached. */
+async function fetchMoves() {
+  const base = process.env.DASHBOARD_URL;
+  const token = process.env.SYNC_TOKEN;
+  if (!base || !token) return {};
+  try {
+    const res = await fetch(new URL('api/moves', base), { headers: { Authorization: `Bearer ${token}` } });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const moves = await res.json();
+    console.log(`Moved classes: ${Object.keys(moves).length}`);
+    return moves;
+  } catch (e) {
+    console.error(`Moved classes unavailable (${e.message}), using the portal's times`);
+    return {};
+  }
+}
+
 async function main() {
   const now = new Date();
   const prev = await readJson(OUT, {});
@@ -109,8 +127,10 @@ async function main() {
     throw error;
   }
 
-  // Reminders: every class from now on that we know about (≤ 3 days, ntfy's limit).
-  const future = (data.schedule || []).filter((c) => !c.status).filter((c) => Date.parse(c.start) > now.getTime() && Date.parse(c.start) - now.getTime() < 3 * DAY);
+  // Reminders: every class from now on that we know about (≤ 3 days, ntfy's limit),
+  // at the times you set on the dashboard for classes you moved.
+  const moves = await fetchMoves();
+  const future = applyMoves(data.schedule, moves).filter((c) => !c.status).filter((c) => Date.parse(c.start) > now.getTime() && Date.parse(c.start) - now.getTime() < 3 * DAY);
   state.reminders = await syncReminders(planDay(future, data.courses, threshold), state.reminders, { now });
 
   if (fetched) {

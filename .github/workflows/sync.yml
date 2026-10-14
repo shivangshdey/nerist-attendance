@@ -37,6 +37,7 @@ jobs:
           SX_PASS: ${{ secrets.SX_PASS }}
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
           DASHBOARD_URL: ${{ vars.DASHBOARD_URL }}
+          SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}
           REMIND_BEFORE_MIN: ${{ vars.REMIND_BEFORE_MIN || '10' }}
           DEBUG_DUMP: ${{ inputs.debug && '1' || '0' }}
         run: node scripts/sync.mjs

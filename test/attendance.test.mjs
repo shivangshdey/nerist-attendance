@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   stats, summarise, buckets, buildCourses, classroomIndex, normaliseSessions, groupBlocks, planDay,
-  dayBuckets, recentSessions, reminderId, reminderAt, istParts,
+  dayBuckets, recentSessions, reminderId, reminderAt, istParts, applyMoves, pruneMoves,
 } from '../scripts/attendance.mjs';
 import { syncReminders, reminderText } from '../scripts/reminders.mjs';
 
@@ -151,4 +151,29 @@ test('syncReminders: schedule, keep unchanged, replace, cancel', async () => {
   calls.length = 0;
   await syncReminders(planDay(blocks.slice(1), groups), s1, opts); // portal cancelled the lab
   assert.ok(calls.some((c) => c.method === 'DELETE' && c.url.endsWith('/t/att-20261013-1500-ec24102-p')));
+});
+
+test('applyMoves: your times win until the portal moves the class itself', () => {
+  const at = (h) => `2026-10-16T${h}:00:00.000Z`;
+  const schedule = [
+    { id: 1, code: 'EC24004', type: 'theory', start: at('04'), end: at('05'), status: null },
+    { id: 2, code: 'EC24102', type: 'theory', start: at('06'), end: at('07'), status: null },
+    { id: 3, code: 'HS24041', type: 'theory', start: at('08'), end: at('09'), status: 'present' },
+  ];
+  const moves = {
+    1: { from: at('04'), start: at('09'), end: at('10') },  // moved later in the day
+    2: { from: at('05'), start: at('03'), end: at('04') },  // portal already shows another time: ignored
+    3: { from: at('08'), start: at('10'), end: at('11') },  // already marked: the portal's record stands
+  };
+  const out = applyMoves(schedule, moves);
+  assert.deepEqual(out.map((c) => c.id), [2, 3, 1]);
+  assert.equal(out[2].start, at('09'));
+  assert.equal(out[2].moved, true);
+  assert.equal(out[2].portalStart, at('04'));
+  assert.equal(out[0].moved, undefined);
+  assert.equal(out[1].start, at('08'));
+  assert.equal(reminderText(planDay([out[2]], buildCourses(classes, statRows))[0]).title.includes('(moved)'), true);
+
+  const now = Date.parse('2026-11-10T00:00:00Z');
+  assert.deepEqual(Object.keys(pruneMoves({ ...moves, 9: { from: '2026-11-08T04:00:00Z', start: '2026-11-08T05:00:00Z', end: '2026-11-08T06:00:00Z' } }, now)), ['9']);
 });

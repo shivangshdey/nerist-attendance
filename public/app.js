@@ -1,8 +1,9 @@
 // Dashboard. Reads data/attendance.json (written by the sync job) and renders.
 
-import { planDay, buckets, istParts, addDays, weekStart, REMIND_BEFORE_MIN } from './lib/attendance.js';
+import { planDay, buckets, applyMoves, istParts, istInstant, addDays, weekStart, REMIND_BEFORE_MIN } from './lib/attendance.js';
 
 const DATA_URL = 'data/attendance.json';
+const MOVES_URL = 'api/moves';
 const $ = (s, r = document) => r.querySelector(s);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const pct1 = (p) => `${(p * 100).toFixed(1)}%`;
@@ -20,13 +21,15 @@ let bucketMap = new Map();
 let view = null;       // 'day' | 'week'
 let weekOf = null;     // Monday (IST date) shown in the calendar
 let dayOf = null;      // date shown in day view
+let moves = {};        // classes you moved: { [id]: { from, start, end } }
+let canSave = false;   // the Worker answered /api/moves (not on a local preview)
 
 /* ------------------------------------------------------------------ plan */
 
 /** Every class with a kind: skip / edge / go (upcoming) or went / missed / unmarked (past). */
 function classify(d) {
   const now = Date.now();
-  const all = (d.schedule || []).slice().sort((a, b) => a.start.localeCompare(b.start));
+  const all = applyMoves(d.schedule, moves);
   const ahead = all.filter((c) => !c.status && Date.parse(c.end || c.start) > now);
   const planned = new Map(planDay(ahead, d.courses, d.threshold).map((c) => [c.start + c.code + c.type, c]));
   return all.map((c, i) => {
@@ -98,7 +101,7 @@ function renderNext() {
   const when = date === today ? 'Today' : date === addDays(today, 1) ? 'Tomorrow' : dateLabel(date, { weekday: 'short', day: 'numeric' });
   const word = next.kind === 'skip' ? 'Bunk it' : 'Go';
   const why = next.kind === 'edge' ? 'no buffer' : next.kind === 'go' ? 'under 75%' : `${next.skipsLeft} left after`;
-  const meta = [next.room, next.periods > 1 ? `counts as ${next.periods}` : '', next.rescheduled ? 'rescheduled' : next.extra ? 'extra class' : ''].filter(Boolean);
+  const meta = [next.room, next.periods > 1 ? `counts as ${next.periods}` : '', next.moved ? 'moved by you' : next.rescheduled ? 'rescheduled' : next.extra ? 'extra class' : ''].filter(Boolean);
   const remind = new Date(Date.parse(next.start) - REMIND_BEFORE_MIN * 60000).toISOString();
   el.innerHTML = `
     <div class="next-top">
@@ -182,9 +185,12 @@ function renderCal() {
   else renderDay(days, inWeek, today);
 }
 
+/** Upcoming classes can be moved; past ones are what the portal says they were. */
+const movable = (c) => canSave && c.id != null && !c.status && Date.parse(c.start) > Date.now();
+
 function evButton(c, extra = '', style = '') {
-  return `<button type="button" class="ev" data-k="${c.kind}" data-i="${c.i}"${extra}${style ? ` style="${style}"` : ''}
-    aria-label="${esc(label(c))}, ${t(c.start)} to ${t(c.end)}, ${TAG[c.kind]}">`;
+  return `<button type="button" class="ev" data-k="${c.kind}" data-i="${c.i}"${c.moved ? ' data-moved' : ''}${movable(c) ? ' data-movable' : ''}${extra}${style ? ` style="${style}"` : ''}
+    aria-label="${esc(label(c))}, ${t(c.start)} to ${t(c.end)}, ${TAG[c.kind]}${c.moved ? ', moved by you' : ''}">`;
 }
 
 function renderWeek(days, items, today) {
@@ -196,6 +202,7 @@ function renderWeek(days, items, today) {
   const h1 = Math.max(17, ...ends.map((m) => Math.ceil(m / 60)));
   const H = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hour')) || 74;
   const y = (m) => ((m - h0 * 60) / 60) * H;
+  geom = { h0, h1, H, cols };
 
   const head = cols.map((d) => `<div class="wk-day"${d === today ? ' data-today' : ''}>
       <b>${dateLabel(d, { day: '2-digit' })}</b><span>${dateLabel(d, { weekday: 'short' })}</span></div>`).join('');
@@ -213,7 +220,7 @@ function renderWeek(days, items, today) {
         <span class="ev-tag">${c.type === 'practical' ? 'lab · ' : ''}${c.live ? 'now · ' : ''}${TAG[c.kind]}</span>
       </button>`;
     }).join('');
-    return `<div class="wk-col"${d === today ? ' data-today' : ''}>${evs}</div>`;
+    return `<div class="wk-col" data-date="${d}"${d === today ? ' data-today' : ''}>${evs}</div>`;
   }).join('');
   const nowM = istParts().minutes;
   const showNow = cols.includes(today) && nowM > h0 * 60 && nowM < h1 * 60;
@@ -241,6 +248,11 @@ function renderDay(days, items, today) {
     </button>`).join('');
   $('#calBody').innerHTML = `<div class="day"><div class="chips">${chips}</div>
     <div class="dl">${rows || '<p class="empty">No classes.</p>'}</div></div>`;
+  const chip = $('.chip[aria-pressed="true"]');
+  const strip = chip?.parentElement;
+  if (strip && (chip.offsetLeft < strip.scrollLeft || chip.offsetLeft + chip.offsetWidth > strip.scrollLeft + strip.clientWidth)) {
+    strip.scrollLeft = chip.offsetLeft - (strip.clientWidth - chip.offsetWidth) / 2;
+  }
 }
 
 /* ------------------------------------------------------------------ class popover */
@@ -258,13 +270,44 @@ function popHtml(c) {
     b && ['Subject now', `${b.attended}/${b.total} · ${pct1(b.pct)}`],
     upcomingKinds.has(c.kind) && ['If you skip', `<b>${pct1(c.ifSkip)}</b>`],
     upcomingKinds.has(c.kind) && ['If you go', `<b>${pct1(c.ifAttend)}</b>`],
+    c.moved && ['Portal says', `${dateLabel(istParts(c.portalStart).date, { weekday: 'short', day: 'numeric' })}, ${t(c.portalStart)}`],
   ].filter(Boolean);
-  return `<div class="pop-head">
-      <span class="ev-tag" data-k="${c.kind}">${TAG[c.kind]}</span>
-      <button type="button" class="pop-x" aria-label="Close"><svg viewBox="0 0 16 16"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7"/></svg></button>
-    </div>
-    <p class="pop-title">${esc(label(c))}${c.rescheduled ? '<em>rescheduled</em>' : c.extra ? '<em>extra</em>' : ''}</p>
-    <dl>${rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>`;
+  const actions = movable(c)
+    ? `<div class="pop-actions">${c.moved ? '<button type="button" class="btn ghost" data-act="reset">Back to portal time</button>' : ''}<button type="button" class="btn" data-act="move">Move class</button></div>`
+    : '';
+  return `${popTop(c)}
+    <p class="pop-title">${esc(label(c))}${c.moved ? '<em>moved</em>' : c.rescheduled ? '<em>rescheduled</em>' : c.extra ? '<em>extra</em>' : ''}</p>
+    <dl>${rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>${actions}`;
+}
+
+const popTop = (c) => `<div class="pop-head">
+    <span class="ev-tag" data-k="${c.kind}">${TAG[c.kind]}</span>
+    <button type="button" class="pop-x" data-act="close" aria-label="Close"><svg viewBox="0 0 16 16"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7"/></svg></button>
+  </div>`;
+
+/** Pick a new day and start time; the class keeps its length. */
+function moveFormHtml(c) {
+  const today = istParts().date;
+  const date = istParts(c.start).date;
+  const dates = Array.from({ length: 14 }, (_, k) => addDays(today, k))
+    .filter((d) => new Date(`${d}T00:00:00Z`).getUTCDay() !== 0 || d === date);
+  const mins = Math.round((Date.parse(c.end) - Date.parse(c.start)) / 60000);
+  const len = mins % 60 ? `${mins} min` : `${mins / 60} hour${mins === 60 ? '' : 's'}`;
+  return `${popTop(c)}
+    <p class="pop-title">Move ${esc(label(c))}</p>
+    <form class="mv" data-act="save">
+      <label>Day
+        <select name="date">${dates.map((d) => `<option value="${d}"${d === date ? ' selected' : ''}>${d === today ? 'Today' : d === addDays(today, 1) ? 'Tomorrow' : dateLabel(d, { weekday: 'short', day: 'numeric', month: 'short' })}</option>`).join('')}</select>
+      </label>
+      <label>Starts
+        <input type="time" name="time" step="300" value="${t(c.start)}" required />
+      </label>
+      <p class="mv-hint">Keeps its ${len}. Changes your dashboard and reminders, not the portal.</p>
+      <div class="pop-actions">
+        <button type="button" class="btn ghost" data-act="back">Cancel</button>
+        <button type="submit" class="btn">Move</button>
+      </div>
+    </form>`;
 }
 
 function openPop(btn) {
@@ -298,7 +341,36 @@ function openPop(btn) {
   void pop.offsetWidth;
   pop.classList.add('in');
   btn.setAttribute('aria-expanded', 'true');
-  $('.pop-x', pop).addEventListener('click', () => { closePop(); btn.focus(); });
+}
+
+/** Swap the popover's contents, keeping it inside the calendar. */
+function swapPop(html) {
+  const pop = $('#pop');
+  const cal = $('.cal');
+  pop.innerHTML = html;
+  const top = parseFloat(pop.style.top) || 0;
+  pop.style.top = `${Math.max(8, Math.min(cal.offsetHeight - pop.offsetHeight - 8, top))}px`;
+}
+
+function onPopAction(e) {
+  const act = e.target.closest('[data-act]')?.dataset.act;
+  if (!act || !popFor) return;
+  const c = list[Number(popFor.dataset.i)];
+  if (act === 'close') { const b = popFor; closePop(); b.focus(); }
+  else if (act === 'move') { swapPop(moveFormHtml(c)); $('#pop select').focus(); }
+  else if (act === 'back') swapPop(popHtml(c));
+  else if (act === 'reset') { closePop(); saveMove(c, null); }
+}
+
+function onMoveSubmit(e) {
+  e.preventDefault();
+  const c = list[Number(popFor?.dataset.i)];
+  const f = new FormData(e.target);
+  const [hh, mm] = String(f.get('time')).split(':').map(Number);
+  if (!c || !Number.isFinite(hh)) return;
+  const start = istInstant(String(f.get('date')), hh * 60 + mm);
+  closePop();
+  saveMove(c, start);
 }
 
 function closePop() {
@@ -308,6 +380,130 @@ function closePop() {
   pop.classList.remove('in');
   popFor?.setAttribute('aria-expanded', 'false');
   popFor = null;
+}
+
+/* ------------------------------------------------------------------ moving classes */
+
+/** Move a class to `start` (a Date), keeping its length; null puts it back at the portal's time. */
+async function saveMove(c, start) {
+  const from = c.portalStart || c.start;
+  const len = Date.parse(c.end) - Date.parse(c.start);
+  const s = start ? start.toISOString() : from;
+  const body = { id: c.id, from, start: s, end: new Date(Date.parse(s) + len).toISOString() };
+  if (s === c.start) return renderCal();
+  const before = moves;
+  moves = { ...moves };
+  if (s === from) delete moves[c.id]; else moves[c.id] = { from, start: body.start, end: body.end };
+  const d = istParts(s).date;
+  weekOf = weekStart(d);
+  dayOf = d;
+  rerender();
+  try {
+    const res = await fetch(MOVES_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    if (res.status === 401) { location.reload(); return; }
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    moves = await res.json();
+    rerender();
+    const when = `${dateLabel(d, { weekday: 'short', day: 'numeric' })}, ${t(s)}`;
+    toast(s === from ? `Back at ${when}` : `Moved to ${when}`, () => saveMove(list.find((x) => x.id === c.id) || c, new Date(c.start)));
+  } catch (err) {
+    console.error(err);
+    moves = before;
+    rerender();
+    toast('Couldn’t save that move. Try again.');
+  }
+}
+
+let toastTimer = null;
+function toast(text, undo) {
+  const el = $('#toast');
+  el.innerHTML = `<span>${esc(text)}</span>${undo ? '<button type="button" class="link">Undo</button>' : ''}`;
+  el.hidden = false;
+  el.classList.remove('in');
+  void el.offsetWidth;
+  el.classList.add('in');
+  if (undo) $('button', el).addEventListener('click', () => { el.hidden = true; undo(); }, { once: true });
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.hidden = true; }, 6000);
+}
+
+/*
+ * Drag a class in the week view to a new day or time (15-minute steps).
+ * Mouse: press and drag. Touch: hold for a moment, then drag, so scrolling still works.
+ */
+let geom = null;       // week grid layout from renderWeek
+let drag = null;
+let dragged = false;   // swallow the click that ends a drag
+
+function initDrag() {
+  const body = $('#calBody');
+  body.addEventListener('pointerdown', (e) => {
+    const ev = e.target.closest('.wk .ev[data-movable]');
+    if (!ev || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    const c = list[Number(ev.dataset.i)];
+    const r = ev.getBoundingClientRect();
+    drag = { ev, c, x: e.clientX, y: e.clientY, grabY: e.clientY - r.top, on: false, id: e.pointerId, touch: e.pointerType !== 'mouse' };
+    if (drag.touch) drag.timer = setTimeout(() => startDrag(e), 380);
+  });
+  addEventListener('pointermove', (e) => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const far = Math.hypot(e.clientX - drag.x, e.clientY - drag.y);
+    if (!drag.on) {
+      if (drag.touch && far > 8) { clearTimeout(drag.timer); drag = null; } // it's a scroll
+      else if (!drag.touch && far > 5) startDrag(e);
+      return;
+    }
+    e.preventDefault();
+    dragTo(e.clientX, e.clientY);
+  });
+  // Once a touch drag starts, stop the page from scrolling under the finger.
+  addEventListener('touchmove', (e) => { if (drag?.on) e.preventDefault(); }, { passive: false });
+  addEventListener('pointerup', (e) => endDrag(e, true));
+  addEventListener('pointercancel', (e) => endDrag(e, false));
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && drag?.on) endDrag(e, false); });
+  body.addEventListener('click', (e) => { if (dragged) { e.stopPropagation(); e.preventDefault(); dragged = false; } }, true);
+  body.addEventListener('contextmenu', (e) => { if (drag) e.preventDefault(); });
+}
+
+function startDrag(e) {
+  if (!drag || drag.on) return;
+  closePop();
+  drag.on = true;
+  drag.ev.dataset.dragging = '';
+  document.body.dataset.dragging = '';
+  navigator.vibrate?.(12);
+  dragTo(e.clientX, e.clientY);
+}
+
+function dragTo(x, y) {
+  const { h0, h1, H } = geom;
+  const colsEls = [...document.querySelectorAll('.wk-col')];
+  const col = colsEls.reduce((best, el) => {
+    const r = el.getBoundingClientRect();
+    const dist = x < r.left ? r.left - x : x > r.right ? x - r.right : 0;
+    return dist < best.dist ? { el, dist } : best;
+  }, { el: colsEls[0], dist: Infinity }).el;
+  const len = (Date.parse(drag.c.end) - Date.parse(drag.c.start)) / 60000;
+  const top = y - col.getBoundingClientRect().top - drag.grabY;
+  const mins = Math.max(h0 * 60, Math.min(h1 * 60 - len, Math.round((h0 * 60 + (top / H) * 60) / 15) * 15));
+  if (drag.ev.parentElement !== col) col.append(drag.ev);
+  drag.ev.style.top = `${((mins - h0 * 60) / 60) * H + 3}px`;
+  drag.target = { date: col.dataset.date, mins };
+  const hhmm = (m) => `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
+  $('.ev-time', drag.ev).textContent = `${hhmm(mins)} – ${hhmm(mins + len)}`;
+}
+
+function endDrag(e, drop) {
+  if (!drag || (e.pointerId != null && e.pointerId !== drag.id)) return;
+  clearTimeout(drag.timer);
+  const d = drag;
+  drag = null;
+  if (!d.on) return;
+  dragged = e.type === 'pointerup';
+  setTimeout(() => { dragged = false; }, 0);
+  delete document.body.dataset.dragging;
+  if (drop && d.target) saveMove(d.c, istInstant(d.target.date, d.target.mins));
+  else renderCal();
 }
 
 /* ------------------------------------------------------------------ controls */
@@ -343,6 +539,9 @@ function initControls() {
     const ev = e.target.closest('.ev');
     if (ev) openPop(ev);
   });
+  $('#pop').addEventListener('click', onPopAction);
+  $('#pop').addEventListener('submit', onMoveSubmit);
+  initDrag();
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && popFor) { const b = popFor; closePop(); b.focus(); } });
   document.addEventListener('pointerdown', (e) => {
     if (!popFor || e.target.closest('#pop') || e.target.closest('.ev')) return;
@@ -359,6 +558,12 @@ function refresh() {
   bucketMap = new Map(buckets(data.courses, data.threshold).map((b) => [`${b.code}|${b.type}`, b]));
 }
 
+function rerender() {
+  refresh();
+  renderNext();
+  renderCal();
+}
+
 function render() {
   refresh();
   renderHead(data);
@@ -368,12 +573,31 @@ function render() {
   document.body.removeAttribute('data-loading');
 }
 
+async function loadMoves() {
+  try {
+    const res = await fetch(`${MOVES_URL}?t=${Date.now()}`, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const next = await res.json();
+    const changed = JSON.stringify(next) !== JSON.stringify(moves);
+    moves = next;
+    canSave = true;
+    return changed;
+  } catch {
+    return false; // local preview: no Worker, so classes can't be moved
+  }
+}
+
 async function load() {
   try {
     const embedded = document.getElementById('embedded-data');
+    const movesChanged = embedded || drag?.on ? false : await loadMoves();
     const next = embedded ? JSON.parse(embedded.textContent) : await (await fetch(`${DATA_URL}?t=${Date.now()}`, { cache: 'no-store' })).json();
     if (!next?.courses) throw new Error('no data');
-    if (data && next.updatedAt === data.updatedAt) { renderSync(data.updatedAt); return; }
+    if (data && next.updatedAt === data.updatedAt) {
+      renderSync(data.updatedAt);
+      if (movesChanged && !popFor) rerender();
+      return;
+    }
     data = next;
     render();
   } catch (err) {
@@ -392,7 +616,7 @@ setInterval(() => document.visibilityState === 'visible' && load(), 5 * 60 * 100
 document.addEventListener('visibilitychange', () => document.visibilityState === 'visible' && load());
 // keep "now", countdowns and verdicts current without a reload; never while a popover is open
 setInterval(() => {
-  if (!data || popFor) return;
+  if (!data || popFor || drag?.on) return;
   renderSync(data.updatedAt);
   refresh();
   renderNext();

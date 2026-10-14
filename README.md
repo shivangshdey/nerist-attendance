@@ -30,6 +30,16 @@ tests check these numbers.
 picked up automatically, with no timetable to keep up to date. Back-to-back lab slots
 are counted as one class worth that many periods.
 
+## Moving a class yourself
+
+Professors sometimes shift a class without updating the portal. Move it on the dashboard:
+drag it in the week view (on a phone, hold it for a moment first), or tap it and choose
+**Move class**. It keeps its length and gets a dashed outline. The bunk verdicts and your
+reminder follow the new time straight away. **Back to portal time** undoes it.
+
+Moves only change your dashboard and reminders, never the portal. If the portal later
+reschedules that class itself, the portal's time wins.
+
 ## Notifications (ntfy, free)
 
 - **10 minutes before each class**: *Bunk OK*, *Don't bunk* (zero buffer) or *Go to class*
@@ -49,13 +59,15 @@ moved or cancelled that class.
    - `SX_PASS`: your portal password
    - `NTFY_TOPIC`: a long random name, e.g. `shivie-att-7f3k9q2m`
 3. **Phone.** Install the **ntfy** app and subscribe to that topic.
-4. **Hosting, visible only to you** (Cloudflare, free):
-   - Workers & Pages → Create → Pages → Connect to Git → this repo. Leave the build command
-     empty and set the output directory to `public`.
-   - Zero Trust → Access → Applications → Self-hosted → your `*.pages.dev` address, with a
-     policy that allows only your email.
-   - Optional: add the repo variable `DASHBOARD_URL` set to that address, so tapping a
-     notification opens the dashboard.
+4. **Hosting, behind a password** (Cloudflare Workers, free):
+   - Workers & Pages → Create → Import a repository → this repo. `wrangler.jsonc` does the rest.
+   - Create the KV store and put its id in `wrangler.jsonc`: `npx wrangler kv namespace create nerist-attendance-moves`
+   - Worker secrets (`npx wrangler secret put NAME`): `DASH_PASSWORD` (your sign-in password),
+     `SESSION_SECRET` and `SYNC_TOKEN` (long random strings), `NTFY_TOPIC`.
+   - Repo secret `SYNC_TOKEN` (same value) and repo variable `DASHBOARD_URL` (your
+     `*.workers.dev` address), so the sync reads your moved classes and notifications open
+     the dashboard.
+   - To change the password, put a new `DASH_PASSWORD`. That signs out every device.
 5. **First run.** Actions → Sync attendance → Run workflow. Your phone gets
    *Attendance connected* and reminders are queued for the next 3 days.
 
@@ -65,13 +77,14 @@ the field names of each portal response, never the values, which is enough to se
 ## Staying free
 
 Each run takes about 20 seconds (no browser), so 12 runs a day stays well inside GitHub's free
-minutes. Cloudflare Pages redeploys only when your numbers change.
+minutes. Cloudflare redeploys only when your numbers change.
 
 ## Files
 
 | Path | What |
 |---|---|
 | `public/` | the dashboard (plain HTML/CSS/JS, no build step) |
+| `worker/` | the Cloudflare Worker: password sign-in and your moved classes |
 | `public/lib/attendance.js` | course counting, the 75% maths and class planning, shared with the sync |
 | `scripts/symphonyx.mjs` | the API client |
 | `scripts/sync.mjs` | fetch → write `public/data/attendance.json` → queue reminders |

@@ -156,6 +156,26 @@ export function groupBlocks(sessions) {
   return out;
 }
 
+/**
+ * Your own moves on top of the portal's timetable, for classes a professor shifts
+ * without updating the portal. moves: { [id]: { from, start, end } }.
+ * A move only applies while the portal still has the class at `from`: once the
+ * portal reschedules it itself, the portal wins.
+ */
+export function applyMoves(schedule = [], moves = {}) {
+  return schedule.map((c) => {
+    const m = c.id != null && moves[c.id];
+    if (!m || m.from !== c.start || c.status) return c;
+    return { ...c, start: m.start, end: m.end, moved: true, portalStart: c.start };
+  }).sort((a, b) => a.start.localeCompare(b.start));
+}
+
+/** Drops moves for classes long gone, so the stored list stays small. */
+export function pruneMoves(moves = {}, now = Date.now()) {
+  const keep = Object.entries(moves).filter(([, m]) => Math.max(Date.parse(m.from), Date.parse(m.end)) > now - 14 * 864e5);
+  return Object.fromEntries(keep);
+}
+
 /* ------------------------------------------------------------------ */
 /* Time helpers (IST)                                                  */
 /* ------------------------------------------------------------------ */
