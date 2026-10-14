@@ -1,0 +1,12 @@
+{
+  "name": "nerist-attendance",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "sync": "node scripts/sync.mjs",
+    "test": "node --test test/*.test.mjs",
+    "preview-data": "node scripts/demo-data.mjs",
+    "dev": "npx --yes serve public -l 4321"
+  }
+}

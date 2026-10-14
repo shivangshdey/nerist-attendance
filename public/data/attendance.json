@@ -1,0 +1,486 @@
+{
+  "preview": true,
+  "updatedAt": "2026-10-13T13:30:00.000Z",
+  "threshold": 0.75,
+  "student": {
+    "name": "Shivangsh Dey",
+    "id": "121/010"
+  },
+  "groups": {
+    "theory": {
+      "attended": 81,
+      "total": 111,
+      "pct": 0.7297297297297297,
+      "canSkip": 0,
+      "mustAttend": 9,
+      "safe": false
+    },
+    "practical": {
+      "attended": 23,
+      "total": 29,
+      "pct": 0.7931034482758621,
+      "canSkip": 1,
+      "mustAttend": 0,
+      "safe": true
+    }
+  },
+  "courses": [
+    {
+      "code": "EC24102",
+      "name": "VLSI Design",
+      "faculty": "Bhabesh Deori",
+      "theory": {
+        "attended": 15,
+        "total": 23
+      },
+      "practical": {
+        "attended": 11,
+        "total": 15
+      }
+    },
+    {
+      "code": "EC24101",
+      "name": "Antenna and Radar Engineering",
+      "faculty": "M. Edison Singh",
+      "theory": {
+        "attended": 20,
+        "total": 27
+      },
+      "practical": {
+        "attended": 12,
+        "total": 14
+      }
+    },
+    {
+      "code": "EC24012",
+      "name": "Semiconductor Device Modelling",
+      "faculty": "Ashok Kumar Ray",
+      "theory": {
+        "attended": 15,
+        "total": 20
+      },
+      "practical": {
+        "attended": 0,
+        "total": 0
+      }
+    },
+    {
+      "code": "EC24004",
+      "name": "Wireless Communication",
+      "faculty": "Rajesh Kumar",
+      "theory": {
+        "attended": 13,
+        "total": 17
+      },
+      "practical": {
+        "attended": 0,
+        "total": 0
+      }
+    },
+    {
+      "code": "HS24041",
+      "name": "Managing Stress",
+      "faculty": "Yuma Narah",
+      "theory": {
+        "attended": 18,
+        "total": 24
+      },
+      "practical": {
+        "attended": 0,
+        "total": 0
+      }
+    }
+  ],
+  "schedule": [
+    {
+      "start": "2026-10-12T04:00:00.000Z",
+      "end": "2026-10-12T05:00:00.000Z",
+      "code": "EC24102",
+      "name": "VLSI Design",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-14",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": "present"
+    },
+    {
+      "start": "2026-10-12T05:00:00.000Z",
+      "end": "2026-10-12T06:00:00.000Z",
+      "code": "EC24004",
+      "name": "Wireless Communication",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-01",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": "absent"
+    },
+    {
+      "start": "2026-10-12T08:30:00.000Z",
+      "end": "2026-10-12T11:30:00.000Z",
+      "code": "EC24101",
+      "name": "Antenna and Radar Engineering",
+      "type": "practical",
+      "periods": 3,
+      "room": "DB-R-15",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": "present"
+    },
+    {
+      "start": "2026-10-13T04:00:00.000Z",
+      "end": "2026-10-13T05:00:00.000Z",
+      "code": "EC24012",
+      "name": "Semiconductor Device Modelling",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-03",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": "present"
+    },
+    {
+      "start": "2026-10-13T06:00:00.000Z",
+      "end": "2026-10-13T07:00:00.000Z",
+      "code": "HS24041",
+      "name": "Managing Stress",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-01",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": "present"
+    },
+    {
+      "start": "2026-10-13T09:30:00.000Z",
+      "end": "2026-10-13T12:30:00.000Z",
+      "code": "EC24102",
+      "name": "VLSI Design",
+      "type": "practical",
+      "periods": 3,
+      "room": "R-14",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": "present"
+    },
+    {
+      "start": "2026-10-14T04:00:00.000Z",
+      "end": "2026-10-14T05:00:00.000Z",
+      "code": "EC24101",
+      "name": "Antenna and Radar Engineering",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-11",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null
+    },
+    {
+      "start": "2026-10-14T05:00:00.000Z",
+      "end": "2026-10-14T06:00:00.000Z",
+      "code": "EC24102",
+      "name": "VLSI Design",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-14",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null
+    },
+    {
+      "start": "2026-10-14T06:30:00.000Z",
+      "end": "2026-10-14T07:30:00.000Z",
+      "code": "EC24004",
+      "name": "Wireless Communication",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-01",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null
+    },
+    {
+      "start": "2026-10-15T04:00:00.000Z",
+      "end": "2026-10-15T05:00:00.000Z",
+      "code": "EC24012",
+      "name": "Semiconductor Device Modelling",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-03",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null
+    },
+    {
+      "start": "2026-10-15T05:00:00.000Z",
+      "end": "2026-10-15T06:00:00.000Z",
+      "code": "EC24101",
+      "name": "Antenna and Radar Engineering",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-11",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null
+    },
+    {
+      "start": "2026-10-15T06:00:00.000Z",
+      "end": "2026-10-15T07:00:00.000Z",
+      "code": "HS24041",
+      "name": "Managing Stress",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-01",
+      "faculty": "",
+      "rescheduled": true,
+      "extra": false,
+      "status": null
+    },
+    {
+      "start": "2026-10-16T04:00:00.000Z",
+      "end": "2026-10-16T05:00:00.000Z",
+      "code": "EC24102",
+      "name": "VLSI Design",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-14",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null
+    },
+    {
+      "start": "2026-10-16T05:00:00.000Z",
+      "end": "2026-10-16T06:00:00.000Z",
+      "code": "EC24012",
+      "name": "Semiconductor Device Modelling",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-03",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null
+    },
+    {
+      "start": "2026-10-16T06:30:00.000Z",
+      "end": "2026-10-16T07:30:00.000Z",
+      "code": "EC24101",
+      "name": "Antenna and Radar Engineering",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-11",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null
+    },
+    {
+      "start": "2026-10-19T04:00:00.000Z",
+      "end": "2026-10-19T05:00:00.000Z",
+      "code": "EC24102",
+      "name": "VLSI Design",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-14",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null
+    },
+    {
+      "start": "2026-10-19T05:00:00.000Z",
+      "end": "2026-10-19T06:00:00.000Z",
+      "code": "EC24004",
+      "name": "Wireless Communication",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-01",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null
+    },
+    {
+      "start": "2026-10-19T08:30:00.000Z",
+      "end": "2026-10-19T11:30:00.000Z",
+      "code": "EC24101",
+      "name": "Antenna and Radar Engineering",
+      "type": "practical",
+      "periods": 3,
+      "room": "DB-R-15",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null
+    },
+    {
+      "start": "2026-10-20T04:00:00.000Z",
+      "end": "2026-10-20T05:00:00.000Z",
+      "code": "EC24012",
+      "name": "Semiconductor Device Modelling",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-03",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null
+    },
+    {
+      "start": "2026-10-20T06:00:00.000Z",
+      "end": "2026-10-20T07:00:00.000Z",
+      "code": "HS24041",
+      "name": "Managing Stress",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-01",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null
+    },
+    {
+      "start": "2026-10-20T09:30:00.000Z",
+      "end": "2026-10-20T12:30:00.000Z",
+      "code": "EC24102",
+      "name": "VLSI Design",
+      "type": "practical",
+      "periods": 3,
+      "room": "R-14",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null
+    },
+    {
+      "start": "2026-10-21T04:00:00.000Z",
+      "end": "2026-10-21T05:00:00.000Z",
+      "code": "EC24101",
+      "name": "Antenna and Radar Engineering",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-11",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null
+    },
+    {
+      "start": "2026-10-21T05:00:00.000Z",
+      "end": "2026-10-21T06:00:00.000Z",
+      "code": "EC24102",
+      "name": "VLSI Design",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-14",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null
+    },
+    {
+      "start": "2026-10-21T06:30:00.000Z",
+      "end": "2026-10-21T07:30:00.000Z",
+      "code": "EC24004",
+      "name": "Wireless Communication",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-01",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null
+    },
+    {
+      "start": "2026-10-22T04:00:00.000Z",
+      "end": "2026-10-22T05:00:00.000Z",
+      "code": "EC24012",
+      "name": "Semiconductor Device Modelling",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-03",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null
+    },
+    {
+      "start": "2026-10-22T05:00:00.000Z",
+      "end": "2026-10-22T06:00:00.000Z",
+      "code": "EC24101",
+      "name": "Antenna and Radar Engineering",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-11",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null
+    },
+    {
+      "start": "2026-10-22T06:00:00.000Z",
+      "end": "2026-10-22T07:00:00.000Z",
+      "code": "HS24041",
+      "name": "Managing Stress",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-01",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null
+    },
+    {
+      "start": "2026-10-23T04:00:00.000Z",
+      "end": "2026-10-23T05:00:00.000Z",
+      "code": "EC24102",
+      "name": "VLSI Design",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-14",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null
+    },
+    {
+      "start": "2026-10-23T05:00:00.000Z",
+      "end": "2026-10-23T06:00:00.000Z",
+      "code": "EC24012",
+      "name": "Semiconductor Device Modelling",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-03",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null
+    },
+    {
+      "start": "2026-10-23T06:30:00.000Z",
+      "end": "2026-10-23T07:30:00.000Z",
+      "code": "EC24101",
+      "name": "Antenna and Radar Engineering",
+      "type": "theory",
+      "periods": 1,
+      "room": "R-11",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null
+    }
+  ]
+}

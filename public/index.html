@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>NERIST Attendance</title>
+  <meta name="theme-color" content="#a3a2d8" />
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='16' fill='%232c2445'/%3E%3Cpath d='M10 16.5l4 4L22.5 12' fill='none' stroke='%23d6f56b' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-loading>
+  <div class="app">
+    <header class="bar">
+      <div class="brand">
+        <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6.5 12.5l3.6 3.6L17.5 8.7" /></svg></span>
+        <span class="wordmark">nerist attendance</span>
+      </div>
+      <div class="views" role="radiogroup" aria-label="Schedule view" id="views">
+        <button type="button" role="radio" aria-checked="false" data-view="day">Day</button>
+        <button type="button" role="radio" aria-checked="true" data-view="week">Week</button>
+      </div>
+      <div class="bar-right">
+        <span class="sync" id="sync"><i></i><span id="syncText">loading</span></span>
+        <span class="avatar" id="avatar" aria-hidden="true"></span>
+      </div>
+    </header>
+
+    <section class="head">
+      <div>
+        <h1>Can I bunk?</h1>
+        <p class="sub" id="sub"></p>
+      </div>
+      <dl class="stats" id="stats"></dl>
+    </section>
+    <p class="note" id="previewNote" hidden>Preview: subject numbers are yours from 13 Oct, the schedule is made up until the first sync.</p>
+
+    <main class="layout">
+      <section class="card next" id="next" aria-labelledby="nextTitle"><span class="next-label" id="nextTitle">Up next</span><p class="next-empty">Loading…</p></section>
+
+      <section class="card list low" aria-labelledby="lowTitle">
+        <header class="list-head">
+          <h2 id="lowTitle">Under 75%</h2>
+          <span class="count" id="lowCount"></span>
+        </header>
+        <ul id="lowList"></ul>
+      </section>
+
+      <section class="card list budget" aria-labelledby="budgetTitle">
+        <header class="list-head">
+          <h2 id="budgetTitle">Bunk budget</h2>
+          <span class="hint">bunks left</span>
+        </header>
+        <ul id="budgetList"></ul>
+      </section>
+
+      <section class="cal" aria-labelledby="calTitle">
+        <header class="cal-head">
+          <h2 id="calTitle"></h2>
+          <div class="cal-nav">
+            <button type="button" class="link" id="calToday">Today</button>
+            <button type="button" class="arrow" id="calPrev" aria-label="Previous week"><svg viewBox="0 0 16 16"><path d="M10 3.5L5.5 8l4.5 4.5" /></svg></button>
+            <button type="button" class="arrow" id="calNext" aria-label="Next week"><svg viewBox="0 0 16 16"><path d="M6 3.5L10.5 8 6 12.5" /></svg></button>
+          </div>
+        </header>
+        <div class="cal-body" id="calBody"><p class="empty pad">Loading your week…</p></div>
+        <div class="pop" id="pop" role="dialog" aria-label="Class details" hidden></div>
+        <footer class="legend" aria-label="Legend">
+          <span><i class="lg skip"></i>bunk ok</span>
+          <span><i class="lg edge"></i>no buffer</span>
+          <span><i class="lg go"></i>go</span>
+          <span><i class="lg went"></i>went</span>
+          <span><i class="lg missed"></i>missed</span>
+        </footer>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

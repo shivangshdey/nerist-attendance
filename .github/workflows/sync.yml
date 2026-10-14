@@ -1,0 +1,81 @@
+name: Sync attendance
+
+on:
+  schedule:
+    - cron: "40 1 * * 1-6"    # 07:10 IST
+    - cron: "40 2-11 * * 1-6" # 08:10–17:10 IST, hourly while classes run
+    - cron: "30 15 * * *"     # 21:00 IST, queues tomorrow's reminders
+  workflow_dispatch:
+    inputs:
+      debug:
+        description: "Save the shape of each portal response (field names only) as a 1-day artifact"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: attendance-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Sync and queue reminders
+        env:
+          SX_USER: ${{ secrets.SX_USER }}
+          SX_PASS: ${{ secrets.SX_PASS }}
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          DASHBOARD_URL: ${{ vars.DASHBOARD_URL }}
+          REMIND_BEFORE_MIN: ${{ vars.REMIND_BEFORE_MIN || '10' }}
+          DEBUG_DUMP: ${{ inputs.debug && '1' || '0' }}
+        run: node scripts/sync.mjs
+
+      - name: Upload debug capture
+        if: ${{ always() && inputs.debug }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-shapes
+          path: debug/
+          retention-days: 1
+
+      - name: Commit data
+        if: always()
+        run: |
+          git config user.name "attendance-bot"
+          git config user.email "attendance-bot@users.noreply.github.com"
+          git add public/data/attendance.json state/state.json 2>/dev/null || true
+          git diff --cached --quiet && exit 0
+          git commit -m "Update attendance $(date -u +%FT%H:%MZ)"
+          git pull --rebase --autostash || true
+          git push
+
+  # Only if you host on GitHub Pages (repo variable DEPLOY_TARGET=github-pages).
+  # Cloudflare Pages deploys by itself when the commit above lands.
+  pages:
+    needs: sync
+    if: ${{ always() && vars.DEPLOY_TARGET == 'github-pages' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+      - id: deploy
+        uses: actions/deploy-pages@v4
