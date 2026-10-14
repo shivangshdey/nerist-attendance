@@ -63,7 +63,8 @@ button { font: inherit; color: inherit; }
 .logo { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--on-canvas); display: grid; place-items: center; flex: none; }
 .logo svg { width: 20px; height: 20px; fill: none; stroke: var(--on-canvas); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
 .wordmark { font-weight: 700; font-size: 1.25rem; letter-spacing: -0.01em; white-space: nowrap; }
-@media (max-width: 520px) { .wordmark { display: none; } }
+@media (max-width: 520px) { .wordmark { font-size: 1.0625rem; } }
+@media (max-width: 379px) { .wordmark { display: none; } }
 
 .views { display: inline-flex; gap: 6px; padding: 4px; border-radius: 999px; background: var(--glass); }
 .views button {
@@ -82,7 +83,15 @@ button { font: inherit; color: inherit; }
 .sync[data-state="stale"] i { background: #ffd36b; }
 .sync[data-state="error"] i { background: #ff8fa8; }
 .avatar { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--lime); color: var(--lime-ink); font-weight: 800; font-size: 0.875rem; flex: none; }
-@media (max-width: 420px) { .sync { padding: 0 10px; } .avatar { display: none; } }
+@media (max-width: 420px) { .sync { padding: 0 12px; } .avatar { display: none; } }
+/* Phones: logo and sync on one row, the Day / Week switch centred on its own row below. */
+@media (max-width: 520px) {
+  .bar { grid-template-columns: auto 1fr; grid-template-areas: "brand right" "views views"; row-gap: 18px; }
+  .brand { grid-area: brand; } .bar-right { grid-area: right; } .views { grid-area: views; }
+  .views { justify-self: center; width: min(100%, 280px); }
+  .views button { flex: 1; }
+  .head { margin-top: 26px; }
+}
 
 :is(button):focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }
 
