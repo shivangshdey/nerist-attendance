@@ -16,6 +16,15 @@ const CAMPUS_ID = 3;
 
 export class PortalError extends Error {}
 
+// iv (12 bytes) + AES-GCM ciphertext/tag, base64url; the challengeId is the additional authenticated data.
+async function encryptPassword({ key, challengeId }, password) {
+  const k = await crypto.subtle.importKey('raw', Buffer.from(key, 'base64'), 'AES-GCM', false, ['encrypt']);
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const enc = new TextEncoder();
+  const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv, additionalData: enc.encode(challengeId), tagLength: 128 }, k, enc.encode(password));
+  return Buffer.concat([iv, new Uint8Array(ct)]).toString('base64url');
+}
+
 export function createClient({ base = BASE, fetchImpl = fetch, debug = null } = {}) {
   let token = '';
   const cookies = new Map();
@@ -27,7 +36,7 @@ export function createClient({ base = BASE, fetchImpl = fetch, debug = null } = 
       Referer: `${base}/student/`,
       'User-Agent': 'Mozilla/5.0 (attendance-sync)',
     };
-    if (token) headers.Authorization = token;
+    headers.Authorization = token; // the portal answers 400 to /login/challenge without the header, even when empty
     if (cookies.size) headers.Cookie = [...cookies].map(([k, v]) => `${k}=${v}`).join('; ');
     if (body !== undefined) headers['Content-Type'] = 'application/json';
 
@@ -59,9 +68,16 @@ export function createClient({ base = BASE, fetchImpl = fetch, debug = null } = 
 
     async login(loginId, password) {
       try { await call('GET', '/api/slmCore/getServiceUrls'); } catch { /* the portal tolerates a missing service token */ }
+      // The portal no longer takes a plain password: it hands out a one-off key (/login/challenge)
+      // and expects the password AES-GCM encrypted with it, as its own login page does.
+      const ch = (await call('GET', '/login/challenge'))?.data;
+      if (!ch?.challengeId || !ch?.key) throw new PortalError('The portal did not issue a login challenge.');
       let res;
       try {
-        res = await call('POST', '/login/verify/password', { instituteId: INSTITUTE_ID, campusId: CAMPUS_ID, loginId, password });
+        res = await call('POST', '/login/verify/password', {
+          instituteId: INSTITUTE_ID, campusId: CAMPUS_ID, loginId,
+          password: await encryptPassword(ch, password), challengeId: ch.challengeId,
+        });
       } catch (e) {
         if (/→ (400|401|403)/.test(e.message)) throw new PortalError('The portal rejected the login. Check SX_USER (your registration number, e.g. 121/010) and SX_PASS.');
         throw e;
