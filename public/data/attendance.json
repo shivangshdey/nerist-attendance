@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-20T07:55:46.874Z",
+  "updatedAt": "2026-10-20T13:51:00.521Z",
   "threshold": 0.75,
   "student": {
     "name": "Shivangsh Dey",
@@ -462,6 +462,20 @@
       "type": "theory",
       "start": "2026-10-29T06:30:00.000Z",
       "end": "2026-10-29T07:30:00.000Z",
+      "room": "DB-R-15",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null,
+      "periods": 1
+    },
+    {
+      "id": 704032,
+      "code": "EC24101",
+      "name": "Antenna and Radar Engineering",
+      "type": "theory",
+      "start": "2026-10-29T10:30:00.000Z",
+      "end": "2026-10-29T11:30:00.000Z",
       "room": "DB-R-15",
       "faculty": "",
       "rescheduled": false,
