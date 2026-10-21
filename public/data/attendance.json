@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-21T07:59:43.966Z",
+  "updatedAt": "2026-10-21T14:07:28.056Z",
   "threshold": 0.75,
   "student": {
     "name": "Shivangsh Dey",
@@ -519,6 +519,20 @@
       "start": "2026-10-30T06:30:00.000Z",
       "end": "2026-10-30T07:30:00.000Z",
       "room": "DB-R-15",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null,
+      "periods": 1
+    },
+    {
+      "id": 652721,
+      "code": "HS24041",
+      "name": "Managing Stress",
+      "type": "theory",
+      "start": "2026-10-30T09:30:00.000Z",
+      "end": "2026-10-30T10:30:00.000Z",
+      "room": "R-01",
       "faculty": "",
       "rescheduled": false,
       "extra": false,
