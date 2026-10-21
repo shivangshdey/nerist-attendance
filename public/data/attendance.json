@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-20T19:31:50.163Z",
+  "updatedAt": "2026-10-21T06:30:51.778Z",
   "threshold": 0.75,
   "student": {
     "name": "Shivangsh Dey",
@@ -476,6 +476,34 @@
       "type": "theory",
       "start": "2026-10-29T10:30:00.000Z",
       "end": "2026-10-29T11:30:00.000Z",
+      "room": "DB-R-15",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null,
+      "periods": 1
+    },
+    {
+      "id": 645480,
+      "code": "EC24101",
+      "name": "Antenna and Radar Engineering",
+      "type": "practical",
+      "start": "2026-10-30T02:30:00.000Z",
+      "end": "2026-10-30T04:30:00.000Z",
+      "room": "EC-R&A",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null,
+      "periods": 2
+    },
+    {
+      "id": 645680,
+      "code": "EC24012",
+      "name": "Semiconductor Device Modelling",
+      "type": "theory",
+      "start": "2026-10-30T05:30:00.000Z",
+      "end": "2026-10-30T06:30:00.000Z",
       "room": "DB-R-15",
       "faculty": "",
       "rescheduled": false,
