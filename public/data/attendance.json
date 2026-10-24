@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-24T07:35:43.492Z",
+  "updatedAt": "2026-10-24T12:13:43.010Z",
   "threshold": 0.75,
   "student": {
     "name": "Shivangsh Dey",
@@ -552,6 +552,20 @@
       "extra": false,
       "status": null,
       "periods": 1
+    },
+    {
+      "id": 645253,
+      "code": "EC24102",
+      "name": "VLSI Design",
+      "type": "practical",
+      "start": "2026-11-02T09:30:00.000Z",
+      "end": "2026-11-02T11:30:00.000Z",
+      "room": "EC-VLSI",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null,
+      "periods": 2
     }
   ]
 }
