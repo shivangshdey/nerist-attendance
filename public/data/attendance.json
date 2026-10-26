@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-26T08:07:16.606Z",
+  "updatedAt": "2026-10-26T15:28:11.846Z",
   "threshold": 0.75,
   "student": {
     "name": "Shivangsh Dey",
@@ -15,10 +15,10 @@
       "safe": false
     },
     "practical": {
-      "attended": 24,
-      "total": 30,
-      "pct": 0.8,
-      "canSkip": 2,
+      "attended": 27,
+      "total": 33,
+      "pct": 0.8181818181818182,
+      "canSkip": 3,
       "mustAttend": 0,
       "safe": true
     }
@@ -33,8 +33,8 @@
         "total": 23
       },
       "practical": {
-        "attended": 12,
-        "total": 16
+        "attended": 15,
+        "total": 19
       }
     },
     {
@@ -111,13 +111,27 @@
       "name": "VLSI Design",
       "type": "practical",
       "start": "2026-10-26T09:30:00.000Z",
+      "end": "2026-10-26T10:30:00.000Z",
+      "room": "EC-VLSI",
+      "faculty": "BHABESH DEORI",
+      "rescheduled": false,
+      "extra": false,
+      "status": "present",
+      "periods": 1
+    },
+    {
+      "id": 645277,
+      "code": "EC24102",
+      "name": "VLSI Design",
+      "type": "practical",
+      "start": "2026-10-26T10:30:00.000Z",
       "end": "2026-10-26T11:30:00.000Z",
       "room": "EC-VLSI",
       "faculty": "",
       "rescheduled": false,
       "extra": false,
       "status": null,
-      "periods": 2
+      "periods": 1
     },
     {
       "id": 645630,
@@ -420,6 +434,34 @@
       "type": "theory",
       "start": "2026-11-04T06:30:00.000Z",
       "end": "2026-11-04T07:30:00.000Z",
+      "room": "DB-R-15",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null,
+      "periods": 1
+    },
+    {
+      "id": 645656,
+      "code": "EC24012",
+      "name": "Semiconductor Device Modelling",
+      "type": "theory",
+      "start": "2026-11-04T09:30:00.000Z",
+      "end": "2026-11-04T10:30:00.000Z",
+      "room": "DB-R-15",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null,
+      "periods": 1
+    },
+    {
+      "id": 645708,
+      "code": "EC24004",
+      "name": "Wireless Communication",
+      "type": "theory",
+      "start": "2026-11-04T10:30:00.000Z",
+      "end": "2026-11-04T11:30:00.000Z",
       "room": "DB-R-15",
       "faculty": "",
       "rescheduled": false,
