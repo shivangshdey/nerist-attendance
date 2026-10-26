@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-26T15:28:11.846Z",
+  "updatedAt": "2026-10-26T20:41:20.702Z",
   "threshold": 0.75,
   "student": {
     "name": "Shivangsh Dey",
@@ -7,11 +7,11 @@
   },
   "groups": {
     "theory": {
-      "attended": 83,
-      "total": 113,
-      "pct": 0.7345132743362832,
+      "attended": 86,
+      "total": 116,
+      "pct": 0.7413793103448276,
       "canSkip": 0,
-      "mustAttend": 7,
+      "mustAttend": 4,
       "safe": false
     },
     "practical": {
@@ -81,8 +81,8 @@
       "name": "Managing Stress",
       "faculty": "",
       "theory": {
-        "attended": 18,
-        "total": 24
+        "attended": 21,
+        "total": 27
       },
       "practical": {
         "attended": 0,
@@ -99,10 +99,10 @@
       "start": "2026-10-26T06:30:00.000Z",
       "end": "2026-10-26T07:30:00.000Z",
       "room": "R-01",
-      "faculty": "",
+      "faculty": "YUMA NARAH",
       "rescheduled": false,
       "extra": false,
-      "status": null,
+      "status": "present",
       "periods": 1
     },
     {
