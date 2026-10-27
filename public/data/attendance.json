@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-27T08:22:25.694Z",
+  "updatedAt": "2026-10-27T14:54:51.501Z",
   "threshold": 0.75,
   "student": {
     "name": "Shivangsh Dey",
@@ -7,11 +7,11 @@
   },
   "groups": {
     "theory": {
-      "attended": 87,
-      "total": 117,
-      "pct": 0.7435897435897436,
+      "attended": 89,
+      "total": 119,
+      "pct": 0.7478991596638656,
       "canSkip": 0,
-      "mustAttend": 3,
+      "mustAttend": 1,
       "safe": false
     },
     "practical": {
@@ -29,8 +29,8 @@
       "name": "VLSI Design",
       "faculty": "",
       "theory": {
-        "attended": 15,
-        "total": 23
+        "attended": 17,
+        "total": 25
       },
       "practical": {
         "attended": 16,
@@ -169,10 +169,10 @@
       "start": "2026-10-27T08:30:00.000Z",
       "end": "2026-10-27T10:30:00.000Z",
       "room": "R-14",
-      "faculty": "",
+      "faculty": "RUSNI KIMA MANGANG",
       "rescheduled": false,
       "extra": false,
-      "status": null,
+      "status": "present",
       "periods": 2
     },
     {
@@ -462,6 +462,20 @@
       "type": "theory",
       "start": "2026-11-05T06:30:00.000Z",
       "end": "2026-11-05T07:30:00.000Z",
+      "room": "DB-R-15",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null,
+      "periods": 1
+    },
+    {
+      "id": 704033,
+      "code": "EC24101",
+      "name": "Antenna and Radar Engineering",
+      "type": "theory",
+      "start": "2026-11-05T10:30:00.000Z",
+      "end": "2026-11-05T11:30:00.000Z",
       "room": "DB-R-15",
       "faculty": "",
       "rescheduled": false,
