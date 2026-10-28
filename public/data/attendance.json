@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-28T07:20:08.612Z",
+  "updatedAt": "2026-10-28T08:59:15.175Z",
   "threshold": 0.75,
   "student": {
     "name": "Shivangsh Dey",
@@ -7,10 +7,10 @@
   },
   "groups": {
     "theory": {
-      "attended": 90,
-      "total": 120,
-      "pct": 0.75,
-      "canSkip": 0,
+      "attended": 93,
+      "total": 123,
+      "pct": 0.7560975609756098,
+      "canSkip": 1,
       "mustAttend": 0,
       "safe": true
     },
@@ -42,8 +42,8 @@
       "name": "Antenna and Radar Engineering",
       "faculty": "",
       "theory": {
-        "attended": 22,
-        "total": 29
+        "attended": 24,
+        "total": 31
       },
       "practical": {
         "attended": 12,
@@ -81,8 +81,8 @@
       "name": "Managing Stress",
       "faculty": "",
       "theory": {
-        "attended": 21,
-        "total": 27
+        "attended": 22,
+        "total": 28
       },
       "practical": {
         "attended": 0,
@@ -141,10 +141,10 @@
       "start": "2026-10-27T04:30:00.000Z",
       "end": "2026-10-27T05:30:00.000Z",
       "room": "R-01",
-      "faculty": "",
+      "faculty": "YUMA NARAH",
       "rescheduled": false,
       "extra": false,
-      "status": null,
+      "status": "present",
       "periods": 1
     },
     {
@@ -155,10 +155,10 @@
       "start": "2026-10-27T06:30:00.000Z",
       "end": "2026-10-27T07:30:00.000Z",
       "room": "DB-R-15",
-      "faculty": "",
+      "faculty": "M. EDISON SINGH",
       "rescheduled": false,
       "extra": false,
-      "status": null,
+      "status": "present",
       "periods": 1
     },
     {
@@ -504,6 +504,20 @@
       "type": "theory",
       "start": "2026-11-06T05:30:00.000Z",
       "end": "2026-11-06T06:30:00.000Z",
+      "room": "DB-R-15",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null,
+      "periods": 1
+    },
+    {
+      "id": 645757,
+      "code": "EC24004",
+      "name": "Wireless Communication",
+      "type": "theory",
+      "start": "2026-11-06T06:30:00.000Z",
+      "end": "2026-11-06T07:30:00.000Z",
       "room": "DB-R-15",
       "faculty": "",
       "rescheduled": false,
