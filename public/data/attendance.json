@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-28T08:59:15.175Z",
+  "updatedAt": "2026-10-28T16:16:43.247Z",
   "threshold": 0.75,
   "student": {
     "name": "Shivangsh Dey",
@@ -7,9 +7,9 @@
   },
   "groups": {
     "theory": {
-      "attended": 93,
-      "total": 123,
-      "pct": 0.7560975609756098,
+      "attended": 94,
+      "total": 124,
+      "pct": 0.7580645161290323,
       "canSkip": 1,
       "mustAttend": 0,
       "safe": true
@@ -55,8 +55,8 @@
       "name": "Semiconductor Device Modelling",
       "faculty": "",
       "theory": {
-        "attended": 16,
-        "total": 21
+        "attended": 17,
+        "total": 22
       },
       "practical": {
         "attended": 0,
@@ -211,10 +211,10 @@
       "start": "2026-10-28T09:30:00.000Z",
       "end": "2026-10-28T10:30:00.000Z",
       "room": "DB-R-15",
-      "faculty": "",
+      "faculty": "ASHOK KUMAR RAY",
       "rescheduled": false,
       "extra": false,
-      "status": null,
+      "status": "present",
       "periods": 1
     },
     {
@@ -519,6 +519,20 @@
       "start": "2026-11-06T06:30:00.000Z",
       "end": "2026-11-06T07:30:00.000Z",
       "room": "DB-R-15",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null,
+      "periods": 1
+    },
+    {
+      "id": 652722,
+      "code": "HS24041",
+      "name": "Managing Stress",
+      "type": "theory",
+      "start": "2026-11-06T09:30:00.000Z",
+      "end": "2026-11-06T10:30:00.000Z",
+      "room": "R-01",
       "faculty": "",
       "rescheduled": false,
       "extra": false,
