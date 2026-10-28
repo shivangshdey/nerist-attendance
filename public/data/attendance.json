@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-27T20:11:51.582Z",
+  "updatedAt": "2026-10-28T07:20:08.612Z",
   "threshold": 0.75,
   "student": {
     "name": "Shivangsh Dey",
@@ -7,12 +7,12 @@
   },
   "groups": {
     "theory": {
-      "attended": 89,
-      "total": 119,
-      "pct": 0.7478991596638656,
+      "attended": 90,
+      "total": 120,
+      "pct": 0.75,
       "canSkip": 0,
-      "mustAttend": 1,
-      "safe": false
+      "mustAttend": 0,
+      "safe": true
     },
     "practical": {
       "attended": 28,
@@ -29,8 +29,8 @@
       "name": "VLSI Design",
       "faculty": "",
       "theory": {
-        "attended": 17,
-        "total": 25
+        "attended": 18,
+        "total": 26
       },
       "practical": {
         "attended": 16,
@@ -183,10 +183,10 @@
       "start": "2026-10-28T04:30:00.000Z",
       "end": "2026-10-28T05:30:00.000Z",
       "room": "R-14",
-      "faculty": "",
+      "faculty": "RUSNI KIMA MANGANG",
       "rescheduled": false,
       "extra": false,
-      "status": null,
+      "status": "present",
       "periods": 1
     },
     {
@@ -197,10 +197,10 @@
       "start": "2026-10-28T06:30:00.000Z",
       "end": "2026-10-28T07:30:00.000Z",
       "room": "DB-R-15",
-      "faculty": "",
+      "faculty": "M. EDISON SINGH",
       "rescheduled": false,
       "extra": false,
-      "status": null,
+      "status": "present",
       "periods": 1
     },
     {
@@ -476,6 +476,34 @@
       "type": "theory",
       "start": "2026-11-05T10:30:00.000Z",
       "end": "2026-11-05T11:30:00.000Z",
+      "room": "DB-R-15",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null,
+      "periods": 1
+    },
+    {
+      "id": 645481,
+      "code": "EC24101",
+      "name": "Antenna and Radar Engineering",
+      "type": "practical",
+      "start": "2026-11-06T02:30:00.000Z",
+      "end": "2026-11-06T04:30:00.000Z",
+      "room": "EC-R&A",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null,
+      "periods": 2
+    },
+    {
+      "id": 645681,
+      "code": "EC24012",
+      "name": "Semiconductor Device Modelling",
+      "type": "theory",
+      "start": "2026-11-06T05:30:00.000Z",
+      "end": "2026-11-06T06:30:00.000Z",
       "room": "DB-R-15",
       "faculty": "",
       "rescheduled": false,
