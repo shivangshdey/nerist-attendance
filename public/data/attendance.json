@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-29T20:29:04.651Z",
+  "updatedAt": "2026-10-30T07:42:39.236Z",
   "threshold": 0.75,
   "student": {
     "name": "Shivangsh Dey",
@@ -7,18 +7,18 @@
   },
   "groups": {
     "theory": {
-      "attended": 94,
-      "total": 126,
-      "pct": 0.746031746031746,
+      "attended": 96,
+      "total": 128,
+      "pct": 0.75,
       "canSkip": 0,
-      "mustAttend": 2,
-      "safe": false
+      "mustAttend": 0,
+      "safe": true
     },
     "practical": {
-      "attended": 28,
-      "total": 34,
-      "pct": 0.8235294117647058,
-      "canSkip": 3,
+      "attended": 30,
+      "total": 36,
+      "pct": 0.8333333333333334,
+      "canSkip": 4,
       "mustAttend": 0,
       "safe": true
     }
@@ -46,8 +46,8 @@
         "total": 32
       },
       "practical": {
-        "attended": 12,
-        "total": 14
+        "attended": 14,
+        "total": 16
       }
     },
     {
@@ -55,8 +55,8 @@
       "name": "Semiconductor Device Modelling",
       "faculty": "",
       "theory": {
-        "attended": 17,
-        "total": 22
+        "attended": 18,
+        "total": 23
       },
       "practical": {
         "attended": 0,
@@ -68,8 +68,8 @@
       "name": "Wireless Communication",
       "faculty": "",
       "theory": {
-        "attended": 13,
-        "total": 18
+        "attended": 14,
+        "total": 19
       },
       "practical": {
         "attended": 0,
@@ -267,10 +267,10 @@
       "start": "2026-10-30T02:30:00.000Z",
       "end": "2026-10-30T04:30:00.000Z",
       "room": "EC-R&A",
-      "faculty": "",
+      "faculty": "M. EDISON SINGH",
       "rescheduled": false,
       "extra": false,
-      "status": null,
+      "status": "present",
       "periods": 2
     },
     {
@@ -281,10 +281,10 @@
       "start": "2026-10-30T05:30:00.000Z",
       "end": "2026-10-30T06:30:00.000Z",
       "room": "DB-R-15",
-      "faculty": "",
+      "faculty": "ASHOK KUMAR RAY",
       "rescheduled": false,
       "extra": false,
-      "status": null,
+      "status": "present",
       "periods": 1
     },
     {
@@ -295,10 +295,10 @@
       "start": "2026-10-30T06:30:00.000Z",
       "end": "2026-10-30T07:30:00.000Z",
       "room": "DB-R-15",
-      "faculty": "",
+      "faculty": "RAJESH KUMAR",
       "rescheduled": false,
       "extra": false,
-      "status": null,
+      "status": "present",
       "periods": 1
     },
     {
