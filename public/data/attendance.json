@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-01T19:51:57.010Z",
+  "updatedAt": "2026-11-02T08:12:42.215Z",
   "threshold": 0.75,
   "student": {
     "name": "Shivangsh Dey",
@@ -398,6 +398,34 @@
       "extra": false,
       "status": null,
       "periods": 2
+    },
+    {
+      "id": 703380,
+      "code": "EC24102",
+      "name": "VLSI Design",
+      "type": "theory",
+      "start": "2026-11-11T04:30:00.000Z",
+      "end": "2026-11-11T05:30:00.000Z",
+      "room": "R-14",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null,
+      "periods": 1
+    },
+    {
+      "id": 704009,
+      "code": "EC24101",
+      "name": "Antenna and Radar Engineering",
+      "type": "theory",
+      "start": "2026-11-11T06:30:00.000Z",
+      "end": "2026-11-11T07:30:00.000Z",
+      "room": "DB-R-15",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null,
+      "periods": 1
     }
   ]
 }
