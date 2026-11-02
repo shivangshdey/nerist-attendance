@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-02T09:57:19.029Z",
+  "updatedAt": "2026-11-02T20:30:16.050Z",
   "threshold": 0.75,
   "student": {
     "name": "Shivangsh Dey",
@@ -15,9 +15,9 @@
       "safe": true
     },
     "practical": {
-      "attended": 30,
-      "total": 36,
-      "pct": 0.8333333333333334,
+      "attended": 31,
+      "total": 37,
+      "pct": 0.8378378378378378,
       "canSkip": 4,
       "mustAttend": 0,
       "safe": true
@@ -33,8 +33,8 @@
         "total": 26
       },
       "practical": {
-        "attended": 16,
-        "total": 20
+        "attended": 17,
+        "total": 21
       }
     },
     {
@@ -434,6 +434,34 @@
       "type": "theory",
       "start": "2026-11-11T06:30:00.000Z",
       "end": "2026-11-11T07:30:00.000Z",
+      "room": "DB-R-15",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null,
+      "periods": 1
+    },
+    {
+      "id": 645657,
+      "code": "EC24012",
+      "name": "Semiconductor Device Modelling",
+      "type": "theory",
+      "start": "2026-11-11T09:30:00.000Z",
+      "end": "2026-11-11T10:30:00.000Z",
+      "room": "DB-R-15",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null,
+      "periods": 1
+    },
+    {
+      "id": 645709,
+      "code": "EC24004",
+      "name": "Wireless Communication",
+      "type": "theory",
+      "start": "2026-11-11T10:30:00.000Z",
+      "end": "2026-11-11T11:30:00.000Z",
       "room": "DB-R-15",
       "faculty": "",
       "rescheduled": false,
