@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-02T23:11:15.812Z",
+  "updatedAt": "2026-11-03T08:31:51.062Z",
   "threshold": 0.75,
   "student": {
     "name": "Shivangsh Dey",
@@ -462,6 +462,20 @@
       "type": "theory",
       "start": "2026-11-11T10:30:00.000Z",
       "end": "2026-11-11T11:30:00.000Z",
+      "room": "DB-R-15",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null,
+      "periods": 1
+    },
+    {
+      "id": 645734,
+      "code": "EC24004",
+      "name": "Wireless Communication",
+      "type": "theory",
+      "start": "2026-11-12T06:30:00.000Z",
+      "end": "2026-11-12T07:30:00.000Z",
       "room": "DB-R-15",
       "faculty": "",
       "rescheduled": false,
