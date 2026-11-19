@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-19T10:45:06.104Z",
+  "updatedAt": "2026-11-19T19:38:03.692Z",
   "threshold": 0.75,
   "student": {
     "name": "Shivangsh Dey",
@@ -7,9 +7,9 @@
   },
   "groups": {
     "theory": {
-      "attended": 115,
-      "total": 151,
-      "pct": 0.7615894039735099,
+      "attended": 116,
+      "total": 152,
+      "pct": 0.7631578947368421,
       "canSkip": 2,
       "mustAttend": 0,
       "safe": true
@@ -42,8 +42,8 @@
       "name": "Antenna and Radar Engineering",
       "faculty": "",
       "theory": {
-        "attended": 27,
-        "total": 36
+        "attended": 28,
+        "total": 37
       },
       "practical": {
         "attended": 16,
@@ -253,10 +253,10 @@
       "start": "2026-11-19T10:30:00.000Z",
       "end": "2026-11-19T11:30:00.000Z",
       "room": "DB-R-15",
-      "faculty": "",
+      "faculty": "M. EDISON SINGH",
       "rescheduled": false,
       "extra": false,
-      "status": null,
+      "status": "present",
       "periods": 1
     },
     {
