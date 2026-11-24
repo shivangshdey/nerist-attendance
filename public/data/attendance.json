@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-24T02:30:12.405Z",
+  "updatedAt": "2026-11-24T11:34:21.818Z",
   "threshold": 0.75,
   "student": {
     "name": "Shivangsh Dey",
@@ -448,6 +448,34 @@
       "type": "theory",
       "start": "2026-12-02T10:30:00.000Z",
       "end": "2026-12-02T11:30:00.000Z",
+      "room": "DB-R-15",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null,
+      "periods": 1
+    },
+    {
+      "id": 645737,
+      "code": "EC24004",
+      "name": "Wireless Communication",
+      "type": "theory",
+      "start": "2026-12-03T06:30:00.000Z",
+      "end": "2026-12-03T07:30:00.000Z",
+      "room": "DB-R-15",
+      "faculty": "",
+      "rescheduled": false,
+      "extra": false,
+      "status": null,
+      "periods": 1
+    },
+    {
+      "id": 704037,
+      "code": "EC24101",
+      "name": "Antenna and Radar Engineering",
+      "type": "theory",
+      "start": "2026-12-03T10:30:00.000Z",
+      "end": "2026-12-03T11:30:00.000Z",
       "room": "DB-R-15",
       "faculty": "",
       "rescheduled": false,
